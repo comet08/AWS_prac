@@ -1,0 +1,63 @@
+
+            body{
+                background-color: rgb(177, 123, 228);
+                text-align: center;
+                font-family:Georgia, 'Times New Roman', Times, serif;
+            }
+            #list{
+                text-align: center;
+                padding-left :7%;
+                padding-right: 5%;
+            }
+            #reading, #form{
+                background-color: white;
+                height: 30%;
+            }
+            #reading{
+                width : 100%;
+            }
+            th, td{
+                font-size: 20px;
+                width : 10%;
+                border-bottom: 1px dotted black;
+            }
+            th{
+                border-bottom: 2px solid black;
+            }
+            #t-title{
+                width:40%;
+            }
+  
+            #sub, #wr{
+                background-color: rgb(104, 0, 117);
+                color:white;
+                font-size: 16px; 
+            }
+
+            #wform, #readin{
+                margin-left: 2%;
+                font-size : 20px;
+            }
+            a{
+                color:rgb(0, 0, 0); 
+                font-size: 45px; 
+                text-decoration-line: none;
+            }
+            .mbutton{
+                background-color:  rgb(177, 123, 228);
+                border: none;
+                font-size : 20px;
+            }
+            .bar{
+                width : 30px;
+                height : 30px;
+                background-color: white;
+                border : none;
+                font-size: 40px;
+            }
+            #barbutton{
+                text-align: center;
+                position:relative;
+                margin-bottom: 10%;
+            }
+            

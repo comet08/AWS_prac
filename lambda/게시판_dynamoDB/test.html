@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset='UTF-8'>
+	</head>
+	<body>
+		<input type="number" id="id" placeholder="id"><br>
+		<input type="text" id="name" placeholder="name"><br>
+		<input type="text" id="nick" placeholder="nick">
+		<input type="button" value="submit" onclick="post()">
+		
+		<hr>
+		<h3>조회</h3>
+		<br>
+		<div id="show"></div>
+	</body>
+	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+	<script>
+		let arr;
+		var url =  "";
+		 $(document).ready(function(){
+             function test(){
+                 $.getJSON(url, function(data){
+                 	arr = data.Items;
+                    var r = document.getElementById("show");
+                    var st="";
+
+                	  for(var i =0; i < arr.length; i++)
+                	  	st+= arr[i].id +' ' + arr[i].name + ' ' +arr[i].nick;
+                    r.innerText= st;
+                     console.log(data);
+                 });
+             };
+                /* fetch(url, {
+                 	headers:{
+                 		'Accept' : 'application/json'
+                 	}
+                 }).then(res=>res.json())
+                 .then(data=>console.log(data))
+                 .catch(err=>console.log(err));
+             }*/
+             test();
+         });
+
+		
+
+		function post(){
+			var id = document.getElementById('id').value;
+			var name = document.getElementById('name').value;
+			var nick = document.getElementById('nick').value;
+			let data={
+				"id":id,
+				"name":name,
+				"nick":nick
+			};     
+			data = JSON.stringify(data);
+			console.log(data);
+			var req = new XMLHttpRequest();
+			req.open('post',url);
+			req.setRequestHeader('Content-Type','application/json');
+			req.send(data);
+			req.addEventListener('load',()=>{
+				result = JSON.parse(req.responseText);
+				
+					alert('success');
+			})
+		}
+	</script>
+</html>

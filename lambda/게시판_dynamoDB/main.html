@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel ="stylesheet" type="text/css" href="main.css">
+
+    </head>
+    <body>
+        <a href="main.html">BOARD</a>
+        <hr>
+        <div id="list" style="display:inherit;">
+            <table>
+                <thead>
+                    <th>number</th>
+                    <th id="t-title">title</th>
+                    <th>date</th>
+                </thead>
+                <tbody id="datas">
+                    <tr>
+                        
+                    </tr>
+                </tbody>
+            </table>
+            <div id= "bt-subwr"><br>
+            <button type="button" id="wr" onclick="showform()"> write</button>
+        </div>
+        </div>
+        <div id="form" style="display:none">
+            <br>
+            <form id="wform">
+               title :
+                <textarea id="title" cols="90" rows="1" style="display:inline"></textarea>
+                <hr>
+                <textarea id="content" cols="97" rows="10"></textarea>
+            </form>
+            <br>
+            <div id= "bt-subwr">
+            <button type="button" id="sub" onclick="submit()">submit</button>
+        </div>
+            <br><br>
+        </div>
+        <div id="reading" style="display:none">
+            <br>
+            <form id="readin">title:
+            </form>
+            <br><br><br>
+            <div id="barbutton">
+                <button class="bar" type="button" onclick="reading(eval(now-1))">⇦</button> &nbsp;&nbsp;
+                <button class="bar"  type="button"><img src="bar.png" width="30" height="30" onclick="hideform()"></button> &nbsp;
+                <button class="bar"  type="button" onclick="reading(eval(now+1))">⇨</button>
+            </span>
+        </div>
+
+    </body>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+        let list = document.querySelector("#list");
+        let form = document.querySelector("#form");
+        let datas = document.querySelector("#datas");
+        let read = document.querySelector("#reading");
+
+        let number=-1;
+        let now=-1;
+        
+
+        let myarr =[];
+        let url =  "https://zkrbu0hyo9.execute-api.us-east-2.amazonaws.com/default/myboard";
+        
+     
+        $(document).ready(function(){
+            now=-1;
+            $.getJSON(url, function(data){
+                console.log(data);
+                var arr = data.Items;
+                var st="";
+                arr.sort(function(a,b){
+                    return a.id <= b.id ? -1 : 1;
+                });
+                for(var i = 0 ; i < arr.length; i++){
+                    st+= `<tr><td><button type="button" class="mbutton" onclick="reading(this.innerText)">
+                        ${arr[i].id}</button></td>
+                          <td>${arr[i].title}</button></td>
+                          <td>${arr[i].date}</td></tr>`;
+                    if(number<Number(arr[i].id)) number = Number(arr[i].id);
+                }
+                
+                datas.innerHTML= st;
+
+                
+            })
+        });
+
+        
+        function showform(){
+            list.style="display:none";
+            form.style="display:inline-blocck";
+
+        }
+        function hideform(){
+            list.style="display: inline-block";
+            form.style="display:none";
+            read.style = "display:none";
+        }
+
+        function reading(num){
+            console.log(num);
+            if(num<0 || num>number) alert("마지막 글입니다.");
+            else{
+                var readin = document.querySelector("#readin");
+                list.style="display:none";
+                var mdata = {
+                   select: num
+               }
+                
+                $.get(url, mdata, (data,status)=>{
+                    console.log(data);
+                    var res = data.Items;
+                    readin.innerHTML = `title : ${res[0].title} <hr>
+                    ${res[0].content}
+                    `;
+                })
+                
+               
+               /*
+               // mdata = JSON.stringify(mdata);
+                var req = new XMLHttpRequest();
+                req.open('get', url);
+              //  req.setRequestHeader("content-type","application/json");
+                req.send(mdata);
+                req.addEventListener('load',function(){
+                    
+                    let data = JSON.parse(req.responseText);
+                    console.log(data)
+                    var res = data.Items;
+                    readin.innerHTML = `title : ${res[0].title} <hr>
+                    ${res[0].content}
+                    `;
+                })
+                */
+                now = Number(num);  
+            }
+                   
+           
+            read.style="display:inline-block";
+        }
+        
+            
+        
+        function today(){
+            var d = new Date();
+            var y = d.getFullYear();
+            var m = d.getMonth()+1;
+            if(m<10) m = '0'+m;
+            var d = d.getDate();
+            if(d<10) d = '0'+d;
+            return y+'-'+m+'-'+d;
+
+        }
+
+        function submit(){
+
+            var t = document.querySelector("#title").value;
+            var c = document.querySelector("#content").value;
+            let mdata={
+                "id": Number(number+1),
+                "title" : t,
+                "content" : c,
+                "date" : today()
+            };
+            mdata = JSON.stringify(mdata);
+            $.post(url, mdata, (data,status)=>{
+                alert('success')
+                console.log(data);
+                hideform();
+                location.reload();
+            });
+/*
+            mdata = JSON.stringify(mdata);
+            console.log(mdata);
+            var req = new XMLHttpRequest();
+            req.open('post', url);
+            req.setRequestHeader("content-type","application/json");
+            req.send(mdata);
+            req.addEventListener('load',function(){
+                alert("success");
+                console.log(req.responseText);
+                hideform();
+                location.reload();
+            })
+          */
+            
+        }
+    </script>
+</html>
