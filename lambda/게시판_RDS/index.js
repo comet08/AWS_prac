@@ -1,11 +1,6 @@
 const mysql = require('mysql');
 var db  = mysql.createPool({
-    connectionLimit : 20,
-    host     : 'instance1.ckrwhi64ijc3.us-east-2.rds.amazonaws.com',
-    user     : 'admin',
-    password : 'comet9808',
-    port     : '3306',
-    database : 'board'
+    
 });
 
 const respon = (status, body) => ({
